@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EV Adoption & Charging Infrastructure – MCA Data Science Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f3f7fc;--card:#ffffff;--ink:#10233f;--mut:#60738d;--line:#d5e0ef;--t:#142f56;--t2:#0b1f3a;--e:#234f83;--e2:#6d91bd;--soft:#e7eef7;color-scheme:light}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 'IBM Plex Sans',system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+h1,h2,h3{font-family:'Source Serif 4',Georgia,serif;line-height:1.2;margin:0 0 .5rem}h1{font-size:2rem}h2{font-size:1.4rem;margin-top:1.8rem}h3{font-size:1.05rem}
+aside{position:fixed;inset:0 auto 0 0;width:236px;background:var(--card);border-right:1px solid var(--line);padding:1.2rem .9rem;overflow-y:auto}
+aside b{display:block;font:700 1rem 'Source Serif 4',serif;color:var(--t2);margin-bottom:1.2rem;line-height:1.3}
+aside a{display:block;padding:.6rem .8rem;border-radius:8px;color:var(--ink);text-decoration:none;margin-bottom:2px}
+aside a:hover{background:var(--soft)}aside a.on{background:var(--t);color:#fff;font-weight:600}
+a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--e);outline-offset:2px}
+main{margin-left:236px;padding:1.6rem 2rem 3rem;max-width:1180px}
+.bar{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:.6rem 1rem;margin:1rem 0}
+.bar label{font-weight:600;font-size:.9rem;color:var(--t2);display:flex;gap:.5rem;align-items:center}
+select,input[type=text]{font:inherit;padding:.3rem .5rem;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;margin:1rem 0}
+.k{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--e);border-radius:8px;padding:.8rem 1rem}
+.k small{color:var(--mut);display:block}.k strong{font:700 1.6rem 'Source Serif 4',serif;color:var(--t2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));gap:1rem}
+.c{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.c p.n{color:var(--mut);font-size:.85rem;margin:.5rem 0 0}
+.cv{position:relative;height:300px}.cv.tall{height:360px}
+.pg{display:none}.pg.on{display:block}
+.lead{max-width:70ch;color:var(--mut)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}th,td{padding:.4rem .6rem;border-bottom:1px solid var(--line);text-align:right}th:first-child,td:first-child{text-align:left}th{color:var(--t2);cursor:pointer}
+.sc{overflow-x:auto}.warn{border-left:4px solid #d97706;background:var(--card);padding:.7rem 1rem;border-radius:8px;border:1px solid var(--line);border-left-width:4px;font-size:.9rem}
+.tag{display:inline-block;padding:.1rem .6rem;border-radius:99px;font-size:.8rem;margin:2px;background:var(--soft);border:1px solid var(--line)}
+.hm td{text-align:center;font-weight:600}
+ul.f li{margin-bottom:.4rem}footer{margin-top:2rem;color:var(--mut);font-size:.82rem}
+@media(max-width:820px){aside{position:static;width:auto;display:flex;gap:4px;overflow-x:auto;border:0;border-bottom:1px solid var(--line);padding:.6rem}aside b{display:none}aside a{white-space:nowrap;margin:0}main{margin:0;padding:1rem}}
+</style></head><body>
+<aside><b>EV Adoption &amp; Charging Infrastructure</b>
+<a href="#home">Home</a><a href="#adoption">EV Adoption</a><a href="#charging">Charging Infrastructure</a><a href="#sustainability">Sustainability</a><a href="#projections">Future Projections</a><a href="#ml">Machine Learning</a></aside>
+<main>
+<div class="bar"><label>Start year (time-series charts) <input id="yr" type="range" min="2010" max="2024" value="2010"><output id="yo">2010</output></label></div>
+
+<section class="pg" id="home">
+<h1>Data-Driven Analysis of Electric Vehicle Adoption and Charging Infrastructure for Sustainable Transportation</h1>
+<p class="lead">MCA Data Science project. Every figure in this dashboard is taken from the outputs of the project’s Google Colab notebook.</p>
+<div class="grid">
+<div class="c"><h3>Academic details</h3><table><tr><th style="cursor:default">Name</th><td style="text-align:left">Ruchi</td></tr><tr><th style="cursor:default">Roll No.</th><td style="text-align:left">2026010098</td></tr><tr><th style="cursor:default">Course</th><td style="text-align:left">MCA 1st Semester</td></tr><tr><th style="cursor:default">Session</th><td style="text-align:left">2026–28</td></tr><tr><th style="cursor:default">Institute Name</th><td style="text-align:left">Thapar Institute of Engineering &amp; Technology, Patiala</td></tr><tr><th style="cursor:default">Project Type</th><td style="text-align:left">Individual Project</td></tr></table></div>
+<div class="c"><h3>About this dashboard</h3><p>This is a <b>static front-end dashboard</b>. All results were produced in Google Colab and are embedded here as fixed values. It is not a live, database-connected application, and it does not recompute or fetch data.</p></div>
+</div>
+<div class="kpis" id="k-home"></div>
+<div class="grid">
+<div class="c"><h3>Objectives</h3><ul class="f"><li>Measure global EV stock and sales growth, 2010–2025.</li><li>Compare countries by EV stock and public charging points (2024).</li><li>Test how closely EV stock and charging infrastructure move together.</li><li>Track sustainability indicators: electricity demand, oil displacement, battery deployment.</li><li>Compare 2035 EV stock under the CPS and STEPS scenarios.</li><li>Group 43 countries with K-Means clustering.</li></ul></div>
+<div class="c"><h3>Dataset source</h3><p>File: <i>EV data by country 2026.xlsx</i>, main sheet <b>GEVO_EV_2026</b> (Global EV Outlook 2026 data). 49,375 rows × 9 columns: region_country, category, parameter, mode, powertrain, year, unit, value, Aggregate group. Years 2010–2035; 72 countries/regions; 19 parameters.</p><p>Official source: <b>International Energy Agency (IEA)</b>, <i>Global EV Outlook 2026</i>.</p></div>
+<div class="c"><h3>Methodology</h3><ol class="f"><li>Loaded sheet GEVO_EV_2026 with pandas.</li><li>Checked missing values: <i>unit</i> 22,582 and <i>region_country</i> 1,078, all in price parameters (not used in the analysis).</li><li>Removed 15 exact duplicates → 49,360 rows.</li><li>Global series: Aggregate group = _World, category = Historical, powertrain = EV.</li><li>Country series (2024): groups Other + Projection_country; modes Cars, 2 and 3 wheelers, Vans, Buses, Trucks summed.</li><li>Merged EV stock and charging points: 43 countries. Pearson and Spearman correlation.</li><li>Projections: category Projection-CPS / Projection-STEPS, year 2035, World.</li><li>K-Means (k=2): log1p transform → StandardScaler → KMeans(random_state=42, n_init=10).</li></ol></div>
+<div class="c"><h3>Tools</h3><span class="tag">Python</span><span class="tag">pandas</span><span class="tag">NumPy</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span><span class="tag">scikit-learn</span><span class="tag">Google Colab</span><p class="n">This dashboard is a static front end (HTML, CSS, JavaScript, Chart.js). It has no backend or database.</p></div>
+</div>
+<h2>Key findings and conclusion</h2>
+<div class="c"><ul class="f" id="finds"></ul></div>
+<p class="warn" style="margin-top:1rem">Notebook-level cautions: EV sales and stock <i>share</i> are simple averages across the five vehicle modes, not true fleet-wide shares. Country totals include 2 and 3 wheelers, which is why India and Viet Nam rank high.</p>
+</section>
+
+<section class="pg" id="adoption">
+<h1>EV Adoption</h1><p class="lead">Global EV stock and sales, with the 2024 country comparison.</p>
+<div class="kpis" id="k-ad"></div>
+<div class="bar"><label>Global trend metric <select id="m-ad"><option value="stock">EV stock (millions)</option><option value="sales">EV sales (millions)</option><option value="ssh">Avg sales share (%)</option><option value="tsh">Avg stock share (%)</option></select></label>
+<label>2025 by mode <select id="m-mode"><option value="sales">Sales (millions)</option><option value="share">Sales share (%)</option></select></label></div>
+<div class="grid">
+<div class="c"><h3 id="t-ad"></h3><div class="cv"><canvas id="ch-ad"></canvas></div></div>
+<div class="c"><h3>Sales share vs stock share</h3><div class="cv"><canvas id="ch-sh"></canvas></div><p class="n">Averages across vehicle modes (notebook method).</p></div>
+<div class="c"><h3 id="t-mode"></h3><div class="cv"><canvas id="ch-mode"></canvas></div></div>
+<div class="c"><h3>Top 10 countries by EV stock, 2024</h3><div class="cv"><canvas id="ch-top"></canvas></div><p class="n">46 countries compared; China 99.48 M, India 6.875 M, USA 6.401 M lead.</p></div>
+</div></section>
+
+<section class="pg" id="charging">
+<h1>Charging Infrastructure</h1><p class="lead">Public charging points worldwide and by country, and their relation to EV stock.</p>
+<div class="kpis" id="k-ch"></div>
+<div class="bar"><label>Show types:</label>
+<label><input type="checkbox" class="ty" value="0" checked> Slow</label><label><input type="checkbox" class="ty" value="1" checked> Fast</label><label><input type="checkbox" class="ty" value="2" checked> Ultra-fast</label>
+<label>Country metric <select id="m-cc"><option value="cp">Charging points (2024)</option><option value="rt">EVs per charging point (top 10)</option></select></label></div>
+<div class="grid">
+<div class="c"><h3>Global public charging points by type</h3><div class="cv"><canvas id="ch-ty"></canvas></div></div>
+<div class="c"><h3>Charging points by speed, 2024 (country-level total)</h3><div class="cv"><canvas id="ch-sp"></canvas></div></div>
+<div class="c"><h3 id="t-cc"></h3><div class="cv"><canvas id="ch-cc"></canvas></div></div>
+<div class="c"><h3>EV stock vs charging points (log–log)</h3><div class="cv"><canvas id="ch-sc"></canvas></div><p class="n">Pearson r = 0.9903, Spearman ρ = 0.9041 across 43 countries. Plot shows the 15 countries whose values appear in the notebook output.</p></div>
+</div>
+<h2>Country table (15 countries with saved values)</h2>
+<div class="bar"><label>Search <input type="text" id="q" placeholder="Country"></label></div>
+<div class="c sc"><table id="tb"></table></div>
+</section>
+
+<section class="pg" id="sustainability">
+<h1>Sustainability Indicators</h1><p class="lead">Global EV electricity demand, oil displaced and battery deployed.</p>
+<div class="kpis" id="k-su"></div>
+<div class="grid">
+<div class="c"><h3>EV electricity demand (GWh)</h3><div class="cv"><canvas id="ch-el"></canvas></div></div>
+<div class="c"><h3>Oil displacement (million litres gasoline equivalent)</h3><div class="cv"><canvas id="ch-oil"></canvas></div></div>
+<div class="c"><h3>Battery deployment (GWh)</h3><div class="cv"><canvas id="ch-bat"></canvas></div><p class="n">Data available from 2015 only.</p></div>
+<div class="c sc"><h3>Verified Pearson correlations with EV stock, 2015–2025</h3><table class="hm" id="hm"></table><p class="n">Only the three correlations with EV stock are shown.</p></div>
+</div></section>
+
+<section class="pg" id="projections">
+<h1>Future Projections: 2035 EV Stock</h1><p class="lead">Global EV stock in 2035 under CPS and STEPS, compared with 2025.</p>
+<div class="kpis" id="k-pr"></div>
+<div class="bar"><label>Scenario <select id="m-sc"><option value="both">CPS and STEPS</option><option value="cps">CPS only</option><option value="steps">STEPS only</option></select></label></div>
+<div class="grid">
+<div class="c"><h3>2035 EV stock by vehicle mode (millions)</h3><div class="cv"><canvas id="ch-pm"></canvas></div></div>
+<div class="c"><h3>Historical 2025 vs 2035 scenarios (millions)</h3><div class="cv"><canvas id="ch-pt"></canvas></div></div>
+</div>
+<p class="n" style="margin-top:1rem"><b>Scenario definitions:</b> CPS — Current Policies Scenario; STEPS — Stated Policies Scenario.</p>
+</section>
+
+<section class="pg" id="ml">
+<h1>Machine Learning: K-Means Clustering</h1><p class="lead">43 countries grouped by 2024 EV stock and public charging points (log1p, standardised, k = 2).</p>
+<div class="kpis" id="k-ml"></div>
+<div class="bar"><label>Cluster <select id="m-cl"><option value="all">All</option><option value="0">Cluster 0 (26)</option><option value="1">Cluster 1 (17)</option></select></label></div>
+<div class="grid">
+<div class="c"><h3>Silhouette score by k</h3><div class="cv"><canvas id="ch-si"></canvas></div><p class="n">k = 2 scores highest (0.5062). The elbow plot was drawn in the notebook but inertia values were not printed.</p></div>
+<div class="c"><h3>Clusters: EV stock vs charging points</h3><div class="cv"><canvas id="ch-cl"></canvas></div><p class="n">Only the 15 countries with saved numeric values are plotted. Cluster membership for all 43 is listed below.</p></div>
+</div>
+<div class="c sc" style="margin-top:1rem"><h3>Cluster profile (2024)</h3><table id="cp"></table></div>
+<h2>Countries by cluster</h2><div class="c" id="cl-list"></div>
+</section>
+
+
+</main>
+<script>
+const Y=[...Array(16)].map((_,i)=>2010+i),N=null;
+const D={stock:[0.10,0.21,2.25,4.57,7.51,10.91,15.40,20.85,27.98,38.15,49.20,65.45,80.88,110.89,136.48,167.42],
+sales:[0.05,0.08,2.13,2.53,3.15,3.42,4.03,4.98,7.25,8.83,11.94,17.81,20.02,24.42,27.07,32.94],
+ssh:[0.03,0.04,0.80,0.95,1.18,1.92,2.48,2.88,3.38,3.71,5.12,6.71,7.76,8.36,9.46,11.60],
+tsh:[0.01,0.02,0.10,0.18,0.28,0.47,0.70,0.93,1.22,1.53,1.85,2.29,2.66,3.27,3.85,4.39],
+slow:[3700,10000,29000,42000,90000,150000,240000,310000,400000,610000,680000,1e6,1.7e6,2.5e6,3.4e6,4.3e6],
+fast:[310,830,1600,2600,13000,25000,72000,1e5,140000,2e5,280000,420000,6e5,970000,1.4e6,1.7e6],
+ultra:[N,N,N,N,28,120,1100,2900,8100,1e4,52000,97000,180000,320000,550000,970000],
+tot:[4010,10830,30600,44600,103028,175120,313100,412900,548100,820000,1012000,1517000,2480000,3790000,5350000,6970000],
+el:[1748,1999,2924,4555,7082,15420,23240,29950,41390,46250,49120,69700,94300,122800,155200,254800],
+oil:[139.8,185.4,761.2,1000.6,1743,5530,8260,11260,16420,19100,21210,31470,42600,58100,76600,97200],
+bat:[N,N,N,N,N,26.54,54.90,77.74,106.8,123.7,163.5,335.3,557.8,768,947,1182]};
+const topS=[['China',99.48],['India',6.875],['USA',6.401],['Germany',2.796],['France',2.184],['United Kingdom',2.127],['Viet Nam',1.71],['Netherlands',1.182],['Norway',1.044],['Canada',0.917]];
+const topC=[['China',3300000],['Korea',417160],['USA',193000],['Netherlands',188000],['Germany',157000],['France',152000],['United Kingdom',87800],['Belgium',77000],['India',75700],['Italy',60100]];
+// [country, EV stock, charging points, EVs per point, cluster]
+const T=[['Philippines',234830,275,853.93,1],['United Arab Emirates',173186,620,279.33,1],['Viet Nam',1710000,12400,137.90,0],['India',6875000,75700,90.82,0],['Indonesia',288001,3210,89.72,1],['Uruguay',12050,140,86.07,1],['New Zealand',115610,1410,81.99,1],['Colombia',41000,1100,37.27,1],['Turkiye',440000,11900,36.97,0],['Australia',324000,8910,36.36,0],['Singapore',34666,1001,34.63,1],['USA',6401000,193000,33.17,0],['Norway',1043800,31900,32.72,0],['China',99480000,3300000,30.15,0],['Canada',917190,32100,28.57,0]];
+const CL=[['China','India','USA','Germany','France','United Kingdom','Viet Nam','Netherlands','Norway','Canada','Korea','Sweden','Japan','Italy','Belgium','Spain','Denmark','Turkiye','Switzerland','Australia','Finland','Austria','Thailand','Portugal','Brazil','Israel'],['Indonesia','Philippines','United Arab Emirates','Poland','New Zealand','Mexico','Malaysia','Russia','Iceland','Greece','Colombia','Singapore','Chile','Costa Rica','Uruguay','Jordan','South Africa']];
+const PM=['Cars','2 and 3 wheelers','Vans','Trucks','Buses'],CPS=[450,210,21,9.5,2.5],STP=[470,300,22,10,3.6];
+const C={t:'#142f56',e:'#234f83',l:'#6d91bd',g:'#91afd2',d:'#0b1f3a',a:'#54769f'};
+const $=s=>document.querySelector(s),fmt=n=>n>=1e6?(n/1e6).toFixed(2)+' M':n>=1e3?(n/1e3).toFixed(1)+' k':String(n);
+const kp=(id,a)=>$(id).innerHTML=a.map(([l,v])=>`<div class="k"><small>${l}</small><strong>${v}</strong></div>`).join('');
+const ch={};function mk(id,cfg){ch[id]&&ch[id].destroy();const dark=matchMedia('(prefers-color-scheme: dark)').matches;Chart.defaults.color=dark?'#93b5af':'#52706d';Chart.defaults.borderColor=dark?'#1e3d38':'#d5e8e4';cfg.options=Object.assign({responsive:true,maintainAspectRatio:false},cfg.options);ch[id]=new Chart($('#'+id),cfg)}
+const ds=(l,d,c,x={})=>Object.assign({label:l,data:d,borderColor:c,backgroundColor:c,tension:.25,pointRadius:3,spanGaps:false},x);
+const ax=(x,y,o={})=>({scales:{x:{title:{display:!!x,text:x}},y:Object.assign({title:{display:!!y,text:y},beginAtZero:true},o)}});
+const st=()=>+$('#yr').value-2010,yy=()=>Y.slice(st()),sl=a=>a.slice(st());
+const bar=(id,l,v,c,xl,yl,h)=>mk(id,{type:'bar',data:{labels:l,datasets:[{label:yl,data:v,backgroundColor:c}]},options:Object.assign({indexAxis:h?'y':'x',plugins:{legend:{display:false}}},ax(h?yl:xl,h?xl:yl))});
+const R={
+home(){kp('#k-home',[['Dataset rows (cleaned)','49,360'],['Countries/regions','72'],['Years covered','2010–2035'],['Countries clustered','43'],['Global EV stock 2025','167.42 M'],['Global EV sales 2025','32.94 M']]);
+$('#finds').innerHTML=['Global EV stock rose from 0.10 M (2010) to 167.42 M (2025); annual EV sales reached 32.94 M in 2025.','Public charging points grew from 4,010 (2010) to 6.97 M (2025). Slow chargers are the largest type, with 4.3 M of 6.97 M in 2025.','In 2024 China leads both EV stock (99.48 M) and public charging points (3.3 M), followed by India and the USA on stock and by Korea and the USA on charging.','EV stock and charging points are strongly related across 43 countries (Pearson 0.9903, Spearman 0.9041).','The Philippines (853.93), UAE (279.33) and Viet Nam (137.90) have the most EVs per public charging point.','Electricity demand, oil displacement and battery deployment are all highly correlated with EV stock (r = 0.973 to 0.996, 2015–2025).','By 2035 global EV stock is 693.0 M (CPS, +313.93%) or 805.6 M (STEPS, +381.19%) versus 167.42 M in 2025.','K-Means (k = 2, silhouette 0.5062) splits 43 countries into 26 larger EV markets and 17 smaller ones.'].map(x=>`<li>${x}</li>`).join('')},
+adoption(){kp('#k-ad',[['EV stock 2025','167.42 M'],['EV sales 2025','32.94 M'],['Avg sales share 2025','11.60 %'],['Avg stock share 2025','4.39 %']]);
+const m=$('#m-ad').value,nm={stock:'Global EV stock (millions)',sales:'Global EV sales (millions)',ssh:'Average EV sales share (%)',tsh:'Average EV stock share (%)'}[m];$('#t-ad').textContent=nm+', '+yy()[0]+'–2025';
+mk('ch-ad',{type:'line',data:{labels:yy(),datasets:[ds(nm,sl(D[m]),C.t,{fill:true,backgroundColor:'rgba(37,99,235,.12)'})]},options:Object.assign({plugins:{legend:{display:false}}},ax('Year',nm))});
+mk('ch-sh',{type:'line',data:{labels:yy(),datasets:[ds('Sales share %',sl(D.ssh),C.t),ds('Stock share %',sl(D.tsh),C.e)]},options:ax('Year','Average share (%)')});
+const s=$('#m-mode').value==='sales';$('#t-mode').textContent=s?'EV sales by vehicle mode, 2025 (millions)':'EV sales share by vehicle mode, 2025 (%)';
+s?bar('ch-mode',['Cars','2 and 3 wheelers','Trucks','Vans','Buses'],[21,11,.44,.43,.07],C.e,'Mode','Millions'):bar('ch-mode',['Cars','2 and 3 wheelers','Trucks','Buses','Vans'],[25,15,9,5,4],C.e,'Mode','%');
+bar('ch-top',topS.map(x=>x[0]),topS.map(x=>x[1]),C.t,'Country','EV stock (millions)')},
+charging(){kp('#k-ch',[['Public points 2025','6.97 M'],['Slow / Fast / Ultra 2025','4.3 M / 1.7 M / 0.97 M'],['Pearson r','0.9903'],['Spearman ρ','0.9041']]);
+const on=[...document.querySelectorAll('.ty')].map(x=>x.checked),cols=[C.t,C.e,C.a],nm=['Slow','Fast','Ultra-fast'],ks=['slow','fast','ultra'];
+mk('ch-ty',{type:'line',data:{labels:yy(),datasets:ks.map((k,i)=>on[i]&&ds(nm[i],sl(D[k]),cols[i])).filter(Boolean)},options:ax('Year','Charging points')});
+bar('ch-sp',['Slow','Fast','Ultra-fast'],[3257670,1301165,549193],[C.t,C.e,C.a],'Type','Charging points');
+const r=$('#m-cc').value==='rt';$('#t-cc').textContent=r?'Top 10 countries by EVs per charging point, 2024':'Top 10 countries by public charging points, 2024';
+r?bar('ch-cc',T.slice(0,10).map(x=>x[0]),T.slice(0,10).map(x=>x[3]),C.e,'Country','EVs per point'):bar('ch-cc',topC.map(x=>x[0]),topC.map(x=>x[1]),C.t,'Country','Charging points');
+const pt=c=>T.filter(x=>x[4]===c).map(x=>({x:x[1],y:x[2],n:x[0]}));
+mk('ch-sc',{type:'scatter',data:{datasets:[{label:'Cluster 0',data:pt(0),backgroundColor:C.t,pointRadius:6},{label:'Cluster 1',data:pt(1),backgroundColor:C.a,pointRadius:6}]},options:{scales:{x:{type:'logarithmic',title:{display:true,text:'EV stock'}},y:{type:'logarithmic',title:{display:true,text:'Charging points'}}},plugins:{tooltip:{callbacks:{label:c=>`${c.raw.n}: ${fmt(c.raw.x)} EVs, ${fmt(c.raw.y)} points`}}}}});tbl()},
+sustainability(){kp('#k-su',[['Electricity demand 2025','254,800 GWh'],['Oil displaced 2025','97,200 M litres'],['Battery deployed 2025','1,182 GWh']]);
+const L=(id,k,n,c)=>mk(id,{type:'line',data:{labels:yy(),datasets:[ds(n,sl(D[k]),c,{fill:true,backgroundColor:c+'22'})]},options:Object.assign({plugins:{legend:{display:false}}},ax('Year',n))});
+L('ch-el','el','GWh',C.t);L('ch-oil','oil','Mlge',C.e);L('ch-bat','bat','GWh',C.d);
+const M=[['EV stock vs electricity demand',.973],['EV stock vs oil displacement',.996],['EV stock vs battery deployment',.992]];
+$('#hm').innerHTML='<tr><th style="cursor:default">Pair</th><th style="cursor:default">Pearson r</th></tr>'+M.map(([n,v])=>`<tr><td>${n}</td><td style="background:rgba(5,150,105,${((v-.9)*8).toFixed(2)});color:#fff">${v.toFixed(3)}</td></tr>`).join('')},
+projections(){kp('#k-pr',[['2025 (historical)','167.42 M'],['2035 CPS','693.0 M'],['2035 STEPS','805.6 M'],['Growth CPS / STEPS','+313.93% / +381.19%']]);
+const s=$('#m-sc').value,a=[];s!=='steps'&&a.push({label:'CPS',data:CPS,backgroundColor:C.t});s!=='cps'&&a.push({label:'STEPS',data:STP,backgroundColor:C.e});
+mk('ch-pm',{type:'bar',data:{labels:PM,datasets:a},options:ax('Vehicle mode','Millions')});
+const lb=['Historical 2025'],v=[167.42],c=[C.d];s!=='steps'&&(lb.push('CPS 2035'),v.push(693),c.push(C.t));s!=='cps'&&(lb.push('STEPS 2035'),v.push(805.6),c.push(C.e));
+bar('ch-pt',lb,v,c,'Scenario','Millions')},
+ml(){kp('#k-ml',[['Countries','43'],['Cluster 0','26'],['Cluster 1','17'],['Silhouette (k=2)','0.5062']]);
+mk('ch-si',{type:'line',data:{labels:['2','3','4','5','6'],datasets:[ds('Silhouette',[.5062,.4868,.4784,.3747,.4319],C.t)]},options:Object.assign({plugins:{legend:{display:false}}},ax('Number of clusters (k)','Silhouette score'))});
+const f=$('#m-cl').value,pt=c=>T.filter(x=>x[4]===c).map(x=>({x:x[1],y:x[2],n:x[0]})),d=[];
+(f==='all'||f==='0')&&d.push({label:'Cluster 0',data:pt(0),backgroundColor:C.t,pointRadius:6});(f==='all'||f==='1')&&d.push({label:'Cluster 1',data:pt(1),backgroundColor:C.a,pointRadius:6});
+mk('ch-cl',{type:'scatter',data:{datasets:d},options:{scales:{x:{type:'logarithmic',title:{display:true,text:'EV stock (log)'}},y:{type:'logarithmic',title:{display:true,text:'Charging points (log)'}}},plugins:{tooltip:{callbacks:{label:c=>`${c.raw.n}: ${fmt(c.raw.x)} EVs, ${fmt(c.raw.y)} points`}}}}});
+$('#cp').innerHTML='<tr><th>Cluster</th><th>Countries</th><th>EV stock mean</th><th>median</th><th>min</th><th>max</th><th>Charging mean</th><th>median</th><th>min</th><th>max</th></tr><tr><td>0</td><td>26</td><td>5,080,062</td><td>686,805</td><td>226,600</td><td>99,480,000</td><td>194,691</td><td>32,800</td><td>8,910</td><td>3,300,000</td></tr><tr><td>1</td><td>17</td><td>86,825</td><td>50,550</td><td>7,984</td><td>288,001</td><td>2,709</td><td>1,600</td><td>140</td><td>8,700</td></tr>';
+$('#cl-list').innerHTML=[0,1].filter(i=>f==='all'||+f===i).map(i=>`<h3>Cluster ${i} (${CL[i].length} countries)</h3>`+CL[i].map(c=>`<span class="tag">${c}</span>`).join('')).join('')}};
+let sortK=3,asc=false;
+function tbl(){const q=$('#q').value.toLowerCase(),rows=T.filter(x=>x[0].toLowerCase().includes(q)).sort((a,b)=>(a[sortK]>b[sortK]?1:-1)*(asc?1:-1));
+$('#tb').innerHTML='<tr>'+['Country','EV stock','Charging points','EVs per point','Cluster'].map((h,i)=>`<th data-i="${i}" tabindex="0">${h}</th>`).join('')+'</tr>'+(rows.map(x=>`<tr><td>${x[0]}</td><td>${x[1].toLocaleString()}</td><td>${x[2].toLocaleString()}</td><td>${x[3].toFixed(2)}</td><td>${x[4]}</td></tr>`).join('')||'<tr><td colspan=5>No country matches your search.</td></tr>');
+document.querySelectorAll('#tb th').forEach(h=>{h.onclick=()=>{const i=+h.dataset.i;asc=sortK===i?!asc:i===0;sortK=i;tbl()}})}
+function show(){const p=(location.hash||'#home').slice(1),pg=R[p]?p:'home';document.querySelectorAll('.pg').forEach(s=>s.classList.toggle('on',s.id===pg));document.querySelectorAll('aside a').forEach(a=>a.classList.toggle('on',a.hash==='#'+pg));$('.bar').style.display=['home','ml','projections'].includes(pg)?'none':'';R[pg]()}
+addEventListener('hashchange',()=>{show();scrollTo(0,0)});
+$('#yr').oninput=e=>{$('#yo').textContent=e.target.value;show()};
+['m-ad','m-mode','m-cc','m-sc','m-cl'].forEach(i=>$('#'+i).onchange=()=>{const p=(location.hash||'#home').slice(1);R[p]()});
+document.querySelectorAll('.ty').forEach(x=>x.onchange=()=>R.charging());$('#q').oninput=tbl;
+show();
+</script></body></html>
